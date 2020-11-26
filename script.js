@@ -3,7 +3,7 @@ class Player {
         this.marker = marker;
     }
     computerPlayer(){
-        
+       
     }
 }
 function unoPlayer() {
@@ -15,8 +15,7 @@ function unoPlayer() {
 }
 function onePlayer() {
     const player1 = new Player('X');
-    const player2 = new Player('O');
-    var i = 1;
+    var i = 0;
     var tieTicker = 0;
     var gameFlow = {
         
@@ -43,12 +42,16 @@ function onePlayer() {
                 document.getElementById('botMid').innerHTML,
                 document.getElementById('botRight').innerHTML,
             ]
+           
         },
         placeMarker: function() { //Puts Marker on Grid. Executes 3 functions on click.
             this.board.forEach(item => item.addEventListener('click', () => {
-                item.innerHTML = gameFlow.switchPlayer();
+                
+                item.innerHTML = player1.marker;
+                gameFlow.switchPlayer();
                 gameFlow.cacheDom();
                 gameFlow.playGame();
+
             }))
         },
         playGame: function() { //Runs interior of grid through a logic if/else checking for similarities
@@ -62,17 +65,21 @@ function onePlayer() {
                 : this.top[2] === this.mid[1] && this.top[2] === this.bot[0] && this.top[2] !== '' ? this.declareWinner()//Diagnol
                 : this.declareTie();
         },
+       
         switchPlayer: function() { //Flips the marker from X to 0
-            if (i % 2 != 0){
-                i+=1;
-                return player1.marker;
+                if(this.board[i].innerHTML != '') {
+                    i+=1;
+                    return this.switchPlayer();
             }else {
-                i+=1;
-                return player2.marker;
+                 return this.board[i].innerHTML = 'O';
+                 
             }
+            
+            
         },
+        
         declareWinner: function() {
-            i-=1; //Switches to last person who placed a marker
+             //Switches to last person who placed a marker
             
             const grid = document.getElementById('gridParent');
             setTimeout(function() {grid.id = 'showMe'}, 1500);
@@ -139,7 +146,10 @@ function twoPlayer() {
         },
         placeMarker: function() { //Puts Marker on Grid. Executes 3 functions on click.
             this.board.forEach(item => item.addEventListener('click', () => {
-                item.innerHTML = gameFlow.switchPlayer();
+                if(item.innerHTML != '') {
+                    return item.innerHTML;
+                }
+                item.innerHTML = gameFlow.switchPlayer(item);
                 gameFlow.cacheDom();
                 gameFlow.playGame();
             }))
@@ -155,7 +165,7 @@ function twoPlayer() {
                 : this.top[2] === this.mid[1] && this.top[2] === this.bot[0] && this.top[2] !== '' ? this.declareWinner()//Diagnol
                 : this.declareTie();
         },
-        switchPlayer: function() { //Flips the marker from X to 0
+        switchPlayer: function(item) { //Flips the marker from X to 0
             if (i % 2 != 0){
                 i+=1;
                 return player1.marker;
